@@ -1,0 +1,9 @@
+<h1>Amazon</h1>
+<%= link_to('Products', products_path) %>
+<%= link_to('New Product', new_product_path) %>
+
+<hr>
+<h2>Categories</h2>
+<% @categories.each do |q| %>
+<%= link_to q.name, products_path(category: q) %>
+<% end %>

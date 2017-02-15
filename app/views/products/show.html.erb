@@ -1,0 +1,31 @@
+<h1>show</h1>
+<h1> <%= @product.title %></h1>
+<p> Description -> <%= @product.description %></p>
+<p> Price -> $<%= @product.price %></p>
+<p> Sale Price -> <%= number_to_currency(@product.sale_price) %></p>
+
+<%= @category.name %>
+<br>
+<%= link_to 'Edit', edit_product_path(@product) %>
+<%= link_to 'Delete', product_path(@product), method: :delete,
+data: { confirm: 'Are you sure?' } %>
+<hr>
+<h2>Reviews</h2>
+<h3>Create new review</h3>
+
+<%= @review.errors.full_messages.join(',') %>
+
+<%= form_for [@product, @review] do |f| %>
+<%= f.text_area :body %>
+<%= f.text_area :rating %>
+<%= f.submit %>
+<% end %>
+
+<hr>
+
+<% @product.reviews.each do |review| %>
+    <%= review.body %>
+    <%= review.rating %>
+    <%= link_to 'delete', review_path(review), method: :delete, data:{ confirm: 'Are You Sure?'}  %>
+    <hr>
+<% end  %>
