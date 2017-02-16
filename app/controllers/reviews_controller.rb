@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
     before_action :authenticate_user!, except: [:show, :index]
+    before_action :authorize, only: [:destroy]
 
   def create
     review_params    = params.require(:review).permit(:body, :rating)
@@ -16,12 +17,21 @@ class ReviewsController < ApplicationController
     end
   end
 
-
-
-
   def destroy
     review = Review.find params[:id]
     review.destroy
     redirect_to product_path(review.product_id), notice: 'Review deleted!'
   end
+
+
+  private
+
+  def authorize
+
+    if cannot?(:manage, @review)
+      review = Review.find params[:id]
+      redirect_to product_path(review.product_id), alert: 'Not authorized!'
+    end
+  end
+
 end

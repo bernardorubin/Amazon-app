@@ -5,6 +5,10 @@ Rails.application.routes.draw do
  get '/contact' => 'welcome#contact'
  post '/contact_submit' => 'welcome#contact_submit'
 
+ namespace :admin do
+  resources :dashboard, only: [:index]
+end
+
  # get '/products' => 'products#index'
  # delete '/questions/:id' => 'products#destroy'
  # get '/questions/:id/edit' => 'products#edit'

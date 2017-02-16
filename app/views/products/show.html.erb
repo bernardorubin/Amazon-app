@@ -8,9 +8,11 @@
 <p>Category -> <%= @category.name %></p>
 
 <br>
-<%= link_to 'Edit', edit_product_path(@product) %>
-<%= link_to 'Delete', product_path(@product), method: :delete,
-data: { confirm: 'Are you sure?' } %>
+<% if can?(:manage, @product) %>
+  <%= link_to 'Edit', edit_product_path(@product) %>
+  <%= link_to 'Delete', product_path(@product), method: :delete,
+  data: { confirm: 'Are you sure?' } %>
+<% end  %>
 <hr>
 <h2>Reviews</h2>
 <h3>Create new review</h3>
@@ -31,6 +33,10 @@ data: { confirm: 'Are you sure?' } %>
     Review written by this douche:  <%= @username.first_name %>
     <%= review.body %>
     <%= review.rating %>
+
+  <% if can?(:manage, review) %>
     <%= link_to 'delete', review_path(review), method: :delete, data:{ confirm: 'Are You Sure?'}  %>
+  <% end  %>
+
     <hr>
 <% end  %>

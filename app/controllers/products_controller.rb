@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
   before_action(:find_product, { only: [:show, :edit, :destroy, :update] })
+  before_action :authorize, only: [:edit, :destroy, :update]
 
   def new
     @product = Product.new
@@ -9,6 +10,7 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
     @product.user = current_user
+
     if @product.save
       flash[:notice] = 'Product created successfully'
       redirect_to product_path (@product)
@@ -16,6 +18,7 @@ class ProductsController < ApplicationController
       flash.now[:alert] = 'Please fix errors below'
       render :new
     end
+
   end
 
   def show
@@ -61,6 +64,21 @@ class ProductsController < ApplicationController
   def find_product
     @product = Product.find params[:id]
   end
+
+  def authorize
+    if cannot?(:manage, @product)
+      redirect_to root_path, alert: 'Not authorized!'
+    end
+
+  end
+
+  # def rev_authorize
+  #   if cannot?(:manage, @review)
+  #     redirect_to root_path, alert: 'Not authorized!'
+  #   end
+  # end
+
+
 
 
 end
