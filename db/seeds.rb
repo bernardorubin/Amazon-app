@@ -10,11 +10,12 @@
   User.create(first_name: Faker::Pokemon.name, last_name: Faker::Pokemon.name, email: Faker::Internet.email, password_digest: Faker::Internet.password)
 end
 
-100.times do
-  Product.create(title: Faker::Pokemon.name, description: Faker::LordOfTheRings.location, price: Faker::Number.decimal(2), category: Faker::Pokemon.name, user_id: User.last.id)
-end
-
 
 5.times do
   Category.create(name: Faker::Pokemon.name)
+end
+
+
+100.times do
+  Product.create(title: Faker::Pokemon.name, description: Faker::LordOfTheRings.location, price: Faker::Number.decimal(2), category: Category.last.name, user_id: User.last.id)
 end
