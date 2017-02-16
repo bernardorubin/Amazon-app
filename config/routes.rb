@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
- get '/' => 'welcome#index'
+  root 'welcome#index'
  get '/about' => 'welcome#about'
  get '/contact' => 'welcome#contact'
  post '/contact_submit' => 'welcome#contact_submit'
@@ -34,6 +34,10 @@ resources :products, shallow: true do
   resources:reviews, only:[:create, :destroy]
 end
 
+resources :users, only:[:new, :create]
+  resources :sessions, only:[:new, :create] do
+    delete :destroy, on: :collection
+  end
 
 
 end

@@ -1,10 +1,12 @@
-<h1>show</h1>
-<h1> <%= @product.title %></h1>
+<h1>Show Product</h1>
+<h1>Product title -><%= @product.title %></h1>
 <p> Description -> <%= @product.description %></p>
 <p> Price -> $<%= @product.price %></p>
 <p> Sale Price -> <%= number_to_currency(@product.sale_price) %></p>
+<p>Creator -> <%= @username.first_name %></p>
 
-<%= @category.name %>
+<p>Category -> <%= @category.name %></p>
+
 <br>
 <%= link_to 'Edit', edit_product_path(@product) %>
 <%= link_to 'Delete', product_path(@product), method: :delete,
@@ -24,6 +26,9 @@ data: { confirm: 'Are you sure?' } %>
 <hr>
 
 <% @product.reviews.each do |review| %>
+<%  @username = User.find review.user_id %>
+
+    Review written by this douche:  <%= @username.first_name %>
     <%= review.body %>
     <%= review.rating %>
     <%= link_to 'delete', review_path(review), method: :delete, data:{ confirm: 'Are You Sure?'}  %>

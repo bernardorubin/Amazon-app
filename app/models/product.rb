@@ -8,6 +8,7 @@
 
 class Product < ApplicationRecord
   has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
+  belongs_to :user
 
   validates :title, {presence: true, uniqueness: {:case_sensitive => false}}
   validates :price, presence: true, numericality: {greater_than_or_equal_to: 0}

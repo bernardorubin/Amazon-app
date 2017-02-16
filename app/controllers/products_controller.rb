@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  before_action :authenticate_user!, except: [:show, :index]
   before_action(:find_product, { only: [:show, :edit, :destroy, :update] })
 
   def new
@@ -7,7 +8,7 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
-
+    @product.user = current_user
     if @product.save
       flash[:notice] = 'Product created successfully'
       redirect_to product_path (@product)
@@ -17,22 +18,20 @@ class ProductsController < ApplicationController
     end
   end
 
-
-
   def show
     @review = Review.new
     @category = Category.find @product.category
+    @username = User.find @product.user_id
     # @product = Product.find params[:id]
   end
 
 
   def index
-  if params[:category]
-    @products = Product.order(created_at: :desc).where("category = '#{params[:category]}'")
-
-  else
-    @products = Product.order(created_at: :desc)
-  end
+    if params[:category]
+      @products = Product.order(created_at: :desc).where("category = '#{params[:category]}'")
+    else
+      @products = Product.order(created_at: :desc)
+    end
   end
 
   def edit

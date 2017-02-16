@@ -1,6 +1,8 @@
-<h1>hello</h1>
+<h1>All Products</h1>
 <% @products.each do |q|  %>
 <%# link_to q.title, q %>
+<%  @username = User.find q.user_id %>
+<%= @username.first_name %>
 <%= link_to q.title, product_path(q) %>
 <hr>
 
