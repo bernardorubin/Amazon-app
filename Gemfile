@@ -8,8 +8,6 @@ git_source(:github) do |repo_name|
 end
 
 gem 'cancancan'
-
-gem 'faker', '~> 1.6', '>= 1.6.3'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
 # Use postgresql as the database for Active Record
@@ -38,21 +36,19 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  gem 'rails-controller-testing'
-    gem 'factory_girl_rails'
-    gem 'nyan-cat-formatter'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
+    gem 'byebug', platform: :mri
+    gem 'rspec-rails', '~> 3.5'
+    gem 'factory_girl_rails'
+    gem 'rails-controller-testing'
+    gem 'faker', '~> 1.6', '>= 1.6.3'
+    gem 'nyan-cat-formatter'
 end
 
 group :development do
-  gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'rails-controller-testing'
-
-
-  gem 'awesome_print'
+  gem 'colorize'
   gem 'interactive_editor'
+  gem 'awesome_print'
   gem 'hirb'
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'

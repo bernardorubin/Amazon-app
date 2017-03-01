@@ -13,6 +13,7 @@ RSpec.describe ProductsController, type: :controller do
         expect(response).to redirect_to(new_session_path)
       end
     end
+
     context 'with session' do
       before do
         request.session[:user_id] = user.id
@@ -105,5 +106,5 @@ RSpec.describe ProductsController, type: :controller do
 
 
   end
-  # to do:  tests for edit index update show
+  # to do:  tests for update index show
 end

@@ -12,6 +12,8 @@ class ReviewsController < ApplicationController
     if @review.save
       redirect_to product_path(@product), notice: 'review created!'
     else
+      logger.debug "Review failed Validations".yellow
+      logger.debug " - #{@review.errors.full_messages.join("\n - ")} The Review was not saved".yellow
       flash[:alert] = 'please fix errors'
       render 'products/show'
     end

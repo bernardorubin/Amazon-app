@@ -15,6 +15,8 @@ class ProductsController < ApplicationController
       flash[:notice] = 'Product created successfully'
       redirect_to product_path (@product)
     else
+      logger.debug "Product failed Validations".yellow
+      logger.debug " - #{@product.errors.full_messages.join("\n - ")} The Product was not saved".yellow
       flash.now[:alert] = 'Please fix errors below'
       render :new
     end
@@ -24,8 +26,8 @@ class ProductsController < ApplicationController
   def show
     @review = Review.new
     @category = Category.find @product.category
+    @product = Product.find params[:id]
     @username = User.find @product.user_id
-    # @product = Product.find params[:id]
   end
 
 

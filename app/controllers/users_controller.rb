@@ -16,6 +16,8 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       redirect_to root_path, notice: 'Account created successfully!'
     else
+      logger.debug "Users failed Validations".yellow
+      logger.debug " - #{@user.errors.full_messages.join("\n - ")} The User was not saved".yellow
       render :new
     end
   end

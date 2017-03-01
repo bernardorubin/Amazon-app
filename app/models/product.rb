@@ -1,46 +1,38 @@
-# Add the following validations to your Product model:
-#
-# The title must be present
-# The title must be unique (case insensitive)
-# The price must be a number that is more than 0
-# The description must be present
-# The description must have at least 10 characters
-
 class Product < ApplicationRecord
-  has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
   belongs_to :user
+  has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
 
 ######################### Tests ##########################
 
-    validates :title, {presence: true, uniqueness: true}
-    validates :price, {presence: true}
-    # validates :sale_price, numericality: { less_than_or_equal_to: :price}
+  validates :title, {presence: true, uniqueness: true}
+  validates :price, {presence: true}
+  # validates :sale_price, numericality: { less_than_or_equal_to: :price}
 
-    before_validation(:set_sale_price)
+  before_validation(:set_sale_price)
+  # before_save
+  validate :sale_price_not_higher
 
-    validate :sale_price_not_higher
+  def on_sale?
+    if self.sale_price < self.price
+      true
+    else
+      false
+    end
+  end
 
-    def on_sale?
-      if self.sale_price < self.price
-        true
-      else
-        false
+  private
+
+  def set_sale_price
+      self.sale_price ||= self.price
+  end
+
+  def sale_price_not_higher
+    if self.price
+      if self.sale_price > self.price
+        errors.add(:sale_price, 'Sale Price cant be greater')
       end
     end
-
-    private
-
-    def set_sale_price
-        self.sale_price ||= self.price
-    end
-
-    def sale_price_not_higher
-      if self.price
-        if self.sale_price > self.price
-          errors.add(:sale_price, 'Sale Price cant be greater')
-        end
-      end
-    end
+  end
 
 ########################## End Tests ##################
 

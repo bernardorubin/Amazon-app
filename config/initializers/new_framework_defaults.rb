@@ -15,8 +15,12 @@ Rails.application.config.action_controller.forgery_protection_origin_check = tru
 ActiveSupport.to_time_preserves_timezone = true
 
 # Require `belongs_to` associations by default. Previous versions had false.
-Rails.application.config.active_record.belongs_to_required_by_default = true
-
+# DEREK SEE THIS
+# https://github.com/rails/rails/issues/23589
+# http://stackoverflow.com/questions/38157293/belongs-to-presence-in-rails-5-not-working
+# http://blog.bigbinary.com/2016/02/15/rails-5-makes-belong-to-association-required-by-default.html
+# Rails.application.config.active_record.belongs_to_required_by_default = true
+ActiveRecord::Base.belongs_to_required_by_default = true
 # Do not halt callback chains when a callback returns false. Previous versions had true.
 ActiveSupport.halt_callback_chains_on_return_false = false
 
