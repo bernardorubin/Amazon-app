@@ -4,5 +4,13 @@
   <% @username = User.find q.user_id %>
   <%= @username.first_name %>
   <%= link_to q.title, product_path(q) %>
+  <% if user_signed_in? && can?(:like, q) %>
+    <% if q.liked_by?(current_user)  %>
+      <%= link_to '<i class="fa fa-thumbs-down" aria-hidden="true" style="color: red"></i>'.html_safe, like_path(q.like_for(current_user)), method: :delete %>
+    <% else  %>
+      <%= link_to '<i class="fa fa-thumbs-up" aria-hidden="true"></i>'.html_safe, product_likes_path(q), method: :post %>
+    <% end  %>
+  <% end  %>
+  <%= pluralize q.likes.count, 'like' %>
   <hr>
 <% end  %>

@@ -1,5 +1,12 @@
 <h1>Show Product</h1>
 <h1>Product title -><%= @product.title %></h1>
+<% if user_signed_in? && can?(:like, @product) %>
+  <% if @product.liked_by?(current_user)  %>
+    <%= link_to '<i class="fa fa-thumbs-down" aria-hidden="true" style="color: red"></i>'.html_safe, like_path(@product.like_for(current_user)), method: :delete %>
+  <% else  %>
+    <%= link_to '<i class="fa fa-thumbs-up" aria-hidden="true"></i>'.html_safe, product_likes_path(@product), method: :post %>
+  <% end  %>
+<% end  %>
 <p> Description -> <%= @product.description %></p>
 <p> Price -> $<%= @product.price %></p>
 <p> Sale Price -> <%= number_to_currency(@product.sale_price) %></p>

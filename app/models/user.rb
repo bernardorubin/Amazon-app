@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_many :products, dependent: :nullify
   has_many :reviews, dependent: :nullify
+  has_many :likes, dependent: :destroy
+  has_many :liked_products, through: :likes, source: :product
 
 
   has_secure_password

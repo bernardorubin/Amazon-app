@@ -1,0 +1,54 @@
+rails g model like user:references product:references
+
+rails db:migrate
+
+edit user model
+	has_many :likes, dependent: :destroy
+  has_many :liked_products, through: :likes, source: :product
+
+edit product model
+	has_many :likes, dependent: :destroy
+  has_many :likers, through: :likes, source: :user
+
+test in console
+	p = Product.last
+	u = User.last
+  p.likers << u
+	p.likers
+
+edit like model
+  validates :product_id, uniqueness: {scope: :user_id}
+
+test in console do this twice ->
+  reload!
+  l = Like.new(user: User.last, product: Product.first)
+  l.save
+  second time it should rollback!
+
+edit routes -> inside products routes
+  resources :likes, only: [:create, :destroy]
+
+rails g controller likes create destroy --skip-template-engine --skip-assets
+delete created likes routes in routes.rb
+
+edit ability.rb
+  cannot :like, Product do |p|
+    p.user == user
+  end
+  can :like, Product do |p|
+    p.user != user
+  end
+
+edit product_model define these methods ->
+  def liked_by?(user)
+    likes.exists?(user: user)
+  end
+  def like_for(user)
+    likes.find_by(user: user)
+  end
+
+edit likes controller
+
+edit views
+	index
+	show

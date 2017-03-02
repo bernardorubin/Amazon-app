@@ -18,6 +18,14 @@ class Ability
       r.user == user
     end
 
+    cannot :like, Product do |p|
+      p.user == user
+    end
+
+    can :like, Product do |p|
+      p.user != user
+    end
+
 
 
 

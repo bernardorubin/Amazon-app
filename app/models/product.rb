@@ -1,8 +1,9 @@
 class Product < ApplicationRecord
   belongs_to :user
   has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
-
-######################### Tests ##########################
+  has_many :likes, dependent: :destroy
+  has_many :likers, through: :likes, source: :user
+#################Test Driven Development Tests ####################
 
   validates :title, {presence: true, uniqueness: true}
   validates :price, {presence: true}
@@ -20,6 +21,14 @@ class Product < ApplicationRecord
     end
   end
 
+  def liked_by?(user)
+    likes.exists?(user: user)
+  end
+
+  def like_for(user)
+    likes.find_by(user: user)
+  end
+
   private
 
   def set_sale_price
@@ -33,6 +42,7 @@ class Product < ApplicationRecord
       end
     end
   end
+
 
 ########################## End Tests ##################
 
