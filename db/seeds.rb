@@ -19,3 +19,7 @@ end
 100.times do
   Product.create(title: Faker::Pokemon.name, description: Faker::LordOfTheRings.location, price: Faker::Number.decimal(2), category: Category.last.id, user_id: User.last.id)
 end
+
+10.times do
+  Tag.create name: Faker::Hipster.word
+end

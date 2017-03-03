@@ -1,0 +1,57 @@
+                    ////////KEY///////
+                    💻 Terminal
+                    🎮 Rails Console
+                    ➕ File
+                    /////////////////
+
+//////////////TAGGING\\\\\\\\\\\\\\\\\\\\\\\\
+💻 rails g model tag name
+💻 rails g model tagging product:references tag:references
+💻 rails db:migrate
+
+➕ add tags in seeds file
+💻 rails db:seed
+➕ add taggings relationships in model >> tag.rb
+➕ add taggings relationships in model >> product.rb
+🎮 Check it works >>
+    | Tag.all
+    | p = Product.last
+    | p.tags
+    | p.tag_ids
+    | p.tag_ids = [4,6,7]
+    | p.tag_ids = [4,9,10]
+    | > 2 deletes, one insertion
+➕ show checkboxes in _form.html.erb
+➕ accept the params in the products controller >>
+    {tag_ids: []}
+
+/////////////To display the tags\\\\\\\\\\\\\\\\\\\\
+➕ products controller
+    @tags = Tag.find @product.tag_ids
+➕ show.html.erb
+    <% @tags.each do |tag| %>
+      <%= tag.name %>
+    <% end %>
+////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+////////////////List Products By Tag\\\\\\\\\\\\\\\\\
+
+➕ edit index controller if tag_id is present? filer, else show all
+  if params[:tag_id]
+     @tagging = Tagging.where(tag_id: params[:tag_id])
+     @products_array = []
+     @tagging.each do |x|
+       @products_array << (x.product_id)
+     end
+     @products = Product.order(created_at: :desc).find(@products_array)
+   else
+     @products = Product.order(created_at: :desc)
+   end
+➕ edit index view pass tag id
+  <% @tags.each do |q| %>
+    <%= link_to q.name, products_path(tag_id: q) %>
+  <% end %>
+
+////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//////////////////Add Votes Functionality\\\\\\\\\\\\\\\\\

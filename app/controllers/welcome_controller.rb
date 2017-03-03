@@ -1,6 +1,7 @@
 class WelcomeController < ApplicationController
   def index
     @categories = Category.all
+    @tags = Tag.all
   end
 
   def contact

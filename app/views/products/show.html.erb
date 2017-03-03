@@ -20,11 +20,19 @@
   <%= link_to 'Delete', product_path(@product), method: :delete,
   data: { confirm: 'Are you sure?' } %>
 <% end  %>
+
+<h1>TAGS</h1>
+  <% @tags.each do |tag| %>
+    <%= tag.name %>
+  <% end %>
+  
 <hr>
 <h2>Reviews</h2>
 <h3>Create new review</h3>
 
 <%= @review.errors.full_messages.join(',') %>
+
+
 
 <%= form_for [@product, @review] do |f| %>
 <%= f.text_area :body %>
@@ -33,6 +41,7 @@
 <% end %>
 
 <hr>
+
 
 <% @product.reviews.each do |review| %>
 <%  @username = User.find review.user_id %>

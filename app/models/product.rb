@@ -3,6 +3,8 @@ class Product < ApplicationRecord
   has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
+  has_many :taggings, dependent: :destroy
+  has_many :tags,  through: :taggings
 #################Test Driven Development Tests ####################
 
   validates :title, {presence: true, uniqueness: true}
@@ -12,6 +14,11 @@ class Product < ApplicationRecord
   before_validation(:set_sale_price)
   # before_save
   validate :sale_price_not_higher
+
+# THIS DIDN'T WORK
+  # scope :product_tag, -> (tag) do
+  #   where({tag_id: tag})
+  # end
 
   def on_sale?
     if self.sale_price < self.price

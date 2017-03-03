@@ -7,3 +7,8 @@
 <% @categories.each do |q| %>
 <%= link_to q.name, products_path(category: q) %>
 <% end %>
+
+<h2>Tags</h2>
+<% @tags.each do |q| %>
+  <%= link_to q.name, products_path(tag_id: q) %>
+<% end %>

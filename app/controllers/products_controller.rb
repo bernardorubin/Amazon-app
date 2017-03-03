@@ -28,15 +28,37 @@ class ProductsController < ApplicationController
     @category = Category.find @product.category
     @product = Product.find params[:id]
     @username = User.find @product.user_id
+    # new
+    @tags = Tag.find @product.tag_ids
   end
 
 
   def index
-    if params[:category]
-      @products = Product.order(created_at: :desc).where("category = '#{params[:category]}'")
-    else
-      @products = Product.order(created_at: :desc)
-    end
+    # render json:params
+    if params[:tag_id]
+       @tagging = Tagging.where(tag_id: params[:tag_id])
+       @products_array = []
+       @tagging.each do |x|
+         @products_array << (x.product_id)
+       end
+       @products = Product.order(created_at: :desc).find(@products_array)
+     else
+       @products = Product.order(created_at: :desc)
+     end
+
+     #  if params[:category]
+     #    @products = Product.order(created_at: :desc).where("tag = '#{params[:tag]}'")
+     #  else
+     #    @products = Product.order(created_at: :desc)
+     #  end
+
+     # TA CODE DIDN'T WORK
+      #  @products = Product.all
+      #  if params[:product_tag].present?
+      #    render json:params
+      #    @products = Product.all.product_tag(params[:product_tag])
+      #  end
+      #
   end
 
   def edit
@@ -60,7 +82,7 @@ class ProductsController < ApplicationController
   private
 
   def product_params
-    params.require(:product).permit([:title, :description, :price, :category])
+    params.require(:product).permit([:title, :description, :price, :category, {tag_ids: []}, :tag_id])
   end
 
   def find_product
