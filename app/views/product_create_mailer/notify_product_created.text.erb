@@ -1,0 +1,13 @@
+Hello <%= @owner.full_name %>,
+
+You got a new review to your product:
+
+Product title: <%= @product.title %>
+
+Product description: <%= @product.description %>
+Product price: <%= @product.price %>
+Product Sale Price: <%= @product.sale_price %>
+
+<%= product_url(@product) %>
+
+Amazon Team

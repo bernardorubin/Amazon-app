@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :dashboard, only: [:index]
   end
 
+  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
+
   # get '/products' => 'products#index'
   # delete '/questions/:id' => 'products#destroy'
   # get '/questions/:id/edit' => 'products#edit'

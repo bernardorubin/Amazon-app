@@ -1,0 +1,103 @@
+/////////////////////////////////////////////
+RAILS Chosen jQuery Plugin
+//////////////////////////
+💎 Add 4 gems ->
+  gem 'chosen-rails'
+  gem "delayed_job_web"
+  gem 'delayed_job_active_record'
+  gem 'letter_opener'
+  gem 'sinatra', '2.0.0.beta2'
+
+➕ in application.js load after jquery and before our files >> //= require chosen-jquery
+➕ application.css >>  *= require chosen
+
+➕ edit products.coffee ->products.js
+  $(document).ready(function(){
+    $('.chosen-select').chosen({
+      allow_single_deselect: true,
+      no_results_text: 'No results matched',
+      width: '200px'
+    });
+  });
+
+➕_form.html.erb >>
+      f.collection_select
+      html options->  { multiple: true }
+
+💻 bundle update sinatra
+💻 bundle
+
+/////////////////////////////////////////////
+RAILS MAILS
+///////////
+
+➕ create file config/initializers/setup_mail.rb
+    📝 executed once, if changed you have to restart server
+	ActionMailer::Base.smtp_settings = {
+  	address:              "smtp.gmail.com",
+  	port:                 "587",
+  	enable_starttls_auto: true,
+  	authentication:       :plain,
+  	user_name:            ENV["EMAIL_USER_NAME"],
+  	password:             ENV["EMAIL_PASSWORD"]
+	}
+➕ .gitignore
+    /config/initializers/app_keys.rb
+➕ create app_keys.rb file
+	 ENV["EMAIL_USER_NAME"] = 'answerawesome'
+	 ENV["EMAIL_PASSWORD"] = 'Sup3r$ecret$$'
+
+💻 rails g mailer reviews_mailer
+
+➕ create two views in reviews_mailer and edit them
+
+➕ edit reviews_mailer
+  def notify_product_owner
+
+➕ config environments development.rb
+  config.action_mailer.default_url_options = { host: "localhost:3000" }
+
+
+🎮 -> manually send mail
+  rev = Review.last
+  rev.product.user
+  ReviewsMailer.notify_product_owner(rev).deliver_now
+
+
+➕ reviews controller
+  ReviewsMailer.notify_product_owner(@review).deliver_now
+
+
+➕ config environments development.rb >> So the mails open in browser
+    config.action_mailer.delivery_method = :letter_opener
+
+💻 rails generate delayed_job:active_record
+💻 rails db:migrate
+
+➕ answers controller change deliver_now to deliver_later
+    AnswersMailer.notify_question_owner(@answer).deliver_later
+
+➕ config/application.rb
+    config.active_job.queue_adapter = :delayed_job
+
+➕ add routes ->
+  match "/delayed_job" => DelayedJobWeb, :anchor => false, via: [:get, :post]
+
+👀 to see delayed jobs ⏩ go to http://localhost:3000/delayed_job/
+
+to run it open a new process (tab)
+💻 rails jobs:work
+
+💻 rails g mailer product_create_mailer
+
+➕ products create controller
+  ProductCreateMailer.notify_product_created(@product).deliver_later
+
+➕product_create_mailer.rb >>
+  def notify_product_created(product)
+
+➕ create and edit views
+
+🎮 -> to see delayed jobs in console
+  Delayed::job.last
+  Delayed::job.last.invoke

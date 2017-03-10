@@ -12,6 +12,7 @@ class ProductsController < ApplicationController
     @product.user = current_user
 
     if @product.save
+      ProductCreateMailer.notify_product_created(@product).deliver_later
       flash[:notice] = 'Product created successfully'
       redirect_to product_path (@product)
     else
@@ -25,8 +26,9 @@ class ProductsController < ApplicationController
 
   def show
     @review = Review.new
-    @category = Category.find @product.category
+
     @product = Product.find params[:id]
+    @category = Category.find @product.category
     @username = User.find @product.user_id
     # new
     @tags = Tag.find @product.tag_ids

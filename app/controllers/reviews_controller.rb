@@ -8,8 +8,12 @@ class ReviewsController < ApplicationController
     @product         = Product.find params[:product_id]
     @review.product   = @product
     @review.user = current_user
+    @username = User.find @product.user_id
+    @category = Category.find @product.category
+    @tags = Tag.find @product.tag_ids
 
     if @review.save
+      ReviewsMailer.notify_product_owner(@review).deliver_later
       redirect_to product_path(@product), notice: 'review created!'
     else
       logger.debug "Review failed Validations".yellow
