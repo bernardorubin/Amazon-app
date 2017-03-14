@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user

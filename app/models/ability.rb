@@ -26,6 +26,7 @@ class Ability
       p.user != user
     end
 
+    
 
 
 

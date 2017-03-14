@@ -8,6 +8,8 @@ git_source(:github) do |repo_name|
 end
 
 # My Gems
+gem 'rack-cors', require: 'rack/cors'
+gem 'active_model_serializers'
 gem 'chosen-rails'
 gem "delayed_job_web"
 gem 'delayed_job_active_record'
