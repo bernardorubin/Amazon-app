@@ -1,0 +1,30 @@
+<h1>Products Form</h1>
+<p class="error_message"><%= @product.errors.full_messages.join(', ') %></p>
+<%= form_for @product do |f| %>
+  <div>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  </div>
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+  <div>
+    <%= f.label :price %>
+    <%= f.number_field :price, :step => ".01" %>
+  </div>
+  <div>
+    <%= f.collection_select :category, Category.all, :id, :name  %>
+  </div>
+  <div>
+    <%= f.label :tag_ids %>
+    <%= f.collection_select :tag_ids, Tag.all, :id, :name,
+                            {}, { multiple: true, class: 'chosen-select' }  do |b| %>
+      <div class='tag-wrapper'>
+        <%= b.check_box %>
+        <%= b.text %>
+      </div>
+      <% end  %>
+  </div>
+  <%= f.submit %>
+<% end %>

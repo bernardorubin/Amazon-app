@@ -28,7 +28,7 @@ class ProductsController < ApplicationController
     @review = Review.new
 
     @product = Product.find params[:id]
-    @category = Category.find @product.category
+    # @category = Category.find @product.category
     @username = User.find @product.user_id
     # new
     @tags = Tag.find @product.tag_ids
@@ -68,6 +68,7 @@ class ProductsController < ApplicationController
   end
 
   def update
+    @product.slug = nil
     if @product.update product_params
       redirect_to product_path(@product), notice: 'Product updated!'
     else
@@ -84,7 +85,7 @@ class ProductsController < ApplicationController
   private
 
   def product_params
-    params.require(:product).permit([:title, :description, :price, :category, {tag_ids: []}, :tag_id])
+    params.require(:product).permit([:title, :description, :price, :category, {tag_ids: []}, :tag_id, :image])
   end
 
   def find_product

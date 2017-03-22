@@ -12,7 +12,7 @@
 <p> Sale Price -> <%= number_to_currency(@product.sale_price) %></p>
 <p>Creator -> <%= @username.first_name %></p>
 
-<p>Category -> <%= @category.name %></p>
+<!--<p>Category -> <%# @category.name %></p>-->
 
 <br>
 <% if can?(:manage, @product) %>
@@ -20,6 +20,9 @@
   <%= link_to 'Delete', product_path(@product), method: :delete,
   data: { confirm: 'Are you sure?' } %>
 <% end  %>
+
+  <%= image_tag @product.image.url if @product.image.present?%>
+
 
 <h1>TAGS</h1>
   <% @tags.each do |tag| %>
@@ -30,14 +33,12 @@
 <h2>Reviews</h2>
 <h3>Create new review</h3>
 
-<%= @review.errors.full_messages.join(',') %>
-
-
-
-<%= form_for [@product, @review] do |f| %>
-<%= f.text_area :body %>
-<%= f.text_area :rating %>
-<%= f.submit %>
+<!-- We don't need this anymore with simpleform 👇 -->
+<%# @review.errors.full_messages.join(',') %>
+<%= simple_form_for [@product, @review] do |f| %>
+<%= f.input :body %>
+<%= f.input :rating %>
+<%= f.submit class: 'btn btn-primary' %>
 <% end %>
 
 <hr>

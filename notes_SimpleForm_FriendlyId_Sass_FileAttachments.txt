@@ -1,0 +1,123 @@
+Installed 5 Gems 💎
+
+gem 'bootstrap-sass'
+gem 'simple_form'
+gem 'friendly_id'
+gem 'carrierwave'
+gem "mini_magick"
+
+bundle
+
+////////////////////////////
+Simple Id
+/////////
+💻 rails generate friendly_id
+
+💻 rails g migration add_slug_to_products slug:string:uniq
+
+product.rb
+  extend FriendlyId
+  friendly_id :title, use: [:slugged, :history, :finders]
+
+in rails console test it
+  Product.find_each(&:save)
+  👀 see it is using slugs
+
+# by default friendly_id won't update the slug of question, so one way to
+# force friendly_id to update the slug is by setting the slug to `nil`
+# before updating the question so >>
+products controller in update method add
+      @product.slug = nil
+
+
+////////////////////////////////////////
+Bootstrap Sass
+//////////////
+in application.css
+  *= require bootstrap_and_overrides
+
+create bootstrap_and_overrides.scss
+  @import "bootstrap-sprockets";
+  @import "bootstrap";
+
+/////////////////////
+Simple Form
+///////////
+
+💻 rails generate simple_form:install --bootstrap
+
+edit your forms
+
+basic example syntax:
+  <%= simple_form_for @product do |f| %>
+      <%= f.input :title %>
+      <%= f.submit class: 'btn btn-primary' %>
+  <% end %>
+
+/////////////////////////////////////////
+SASS
+////
+
+create _variables.scss
+in bootstrap_and_overrides add the variables
+  @import 'variables';
+
+//////////////////////////////////////////
+Uploading Files
+///////////////
+💻 rails generate uploader image
+
+💻 rails g migration add_image_to_products
+
+edit migration
+  add_column :products, :image, :string
+
+rails db:migrate
+
+edit product.rb
+  mount_uploader :image, ImageUploader
+
+in image_uploader.rb edit the whole file
+
+in product controller add to params
+        :image
+
+products _form add
+  <%= f.input :image %>
+
+in gitignore  file add public uploads folder
+  /public/uploads
+
+
+product show view
+  <%= image_tag @product.image.url if @product.image.present?%>
+
+products index
+  <%= image_tag p.image.url(:thumb) if p.image.present? %>
+
+///////////////////////////////////////////
+AWS
+///
+💎 gem 'fog'
+bundle
+
+aws click services
+s3
+create a bucket
+
+app_keys.rb ->>> add keys
+  ENV['AWS_ACCESS_KEY_ID'] = 'xxx'
+  ENV['AWS_SECRET_ACCESS_KEY'] = 'xxx'
+
+CREATE file setup_fog.rb
+  CarrierWave.configure do |config|
+    config.fog_credentials = {
+      provider:              'AWS',
+      aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
+      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      region:                'us-west-2'
+    }
+    config.fog_directory  = 'awesomeanswersbernardo'
+    config.fog_public     = false                                        # optional, defaults to true
+    config.fog_attributes = { 'Cache-Control' => "max-age=#{365.day.to_i}" } # optional, defaults to {}
+  end

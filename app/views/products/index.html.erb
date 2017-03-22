@@ -1,16 +1,17 @@
 <h1>All Products</h1>
-<% @products.each do |q|  %>
-  <%# link_to q.title, q %>
-  <% @username = User.find q.user_id %>
+<% @products.each do |p|  %>
+  <%# link_to p.title, p %>
+    <%= image_tag p.image.url(:thumb) if p.image.present? %>
+  <% @username = User.find p.user_id %>
   <%= @username.first_name %>
-  <%= link_to q.title, product_path(q) %>
-  <% if user_signed_in? && can?(:like, q) %>
-    <% if q.liked_by?(current_user)  %>
-      <%= link_to '<i class="fa fa-thumbs-down" aria-hidden="true" style="color: red"></i>'.html_safe, like_path(q.like_for(current_user)), method: :delete %>
+  <%= link_to p.title, product_path(p) %>
+  <% if user_signed_in? && can?(:like, p) %>
+    <% if p.liked_by?(current_user)  %>
+      <%= link_to '<i class="fa fa-thumbs-down" aria-hidden="true" style="color: red"></i>'.html_safe, like_path(p.like_for(current_user)), method: :delete %>
     <% else  %>
-      <%= link_to '<i class="fa fa-thumbs-up" aria-hidden="true"></i>'.html_safe, product_likes_path(q), method: :post %>
+      <%= link_to '<i class="fa fa-thumbs-up" aria-hidden="true"></i>'.html_safe, product_likes_path(p), method: :post %>
     <% end  %>
   <% end  %>
-  <%= pluralize q.likes.count, 'like' %>
+  <%= pluralize p.likes.count, 'like' %>
   <hr>
 <% end  %>

@@ -8,6 +8,18 @@ git_source(:github) do |repo_name|
 end
 
 # My Gems
+
+gem 'geocoder'
+gem 'underscore-rails'
+gem 'gmaps4rails'
+
+
+gem 'fog'
+gem "mini_magick"
+gem 'carrierwave'
+gem 'bootstrap-sass'
+gem 'simple_form'
+gem 'friendly_id'
 gem 'rack-cors', require: 'rack/cors'
 gem 'active_model_serializers'
 gem 'chosen-rails'

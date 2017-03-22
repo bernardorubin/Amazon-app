@@ -1,10 +1,15 @@
 class User < ApplicationRecord
   has_many :products, dependent: :nullify
   has_many :reviews, dependent: :nullify
+  
+  has_many :locations, dependent: :nullify
+
   has_many :likes, dependent: :destroy
   has_many :liked_products, through: :likes, source: :product
-  before_create :create, :generate_api_key
+  before_create :generate_api_key
 
+  geocoded_by :address
+  after_validation :geocode
 
   has_secure_password
 
@@ -29,7 +34,7 @@ class User < ApplicationRecord
   def downcase_email
     self.email&.downcase!
   end
-  
+
   def generate_api_key
     loop do
       self.api_key = SecureRandom.hex

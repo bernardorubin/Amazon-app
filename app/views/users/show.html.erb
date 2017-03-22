@@ -1,0 +1,39 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-md-offset-1 col-md-10 col-lg-offset-1 col-lg-10 user-profile ">
+      <h1>User Profile:</h1>
+      <p><b>First Name:</b> <%= @user.first_name %> </p>
+      <p><b>Last Name:</b> <%= @user.last_name %></p>
+      <p><b>Email:</b> <%= @user.email %></p>
+      <p><b>Address:</b> <%= @user.address %></p>
+      <p>Lat: <%= @user.latitude %></p>
+      <p>Lon: <%= @user.longitude %></p>
+      lat: <%= @user.latitude %>,
+      lng:<%= @user.longitude %>,
+<div style='width: 800px;'>
+  <div id="map" style='width: 800px; height: 400px;'></div>
+</div>
+<script>
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+  markers = handler.addMarkers([
+    {
+      "lat": <%= @user.latitude %>,
+      "lng": <%= @user.longitude %>,
+      "infowindow": "<%= @user.first_name %>"
+    },
+    {
+      "lat": <%= @user.latitude + 0.001 %>,
+      "lng": <%= @user.longitude + 0.001 %>,
+      "infowindow": "<%= @user.first_name %>"
+    },
+  ]);
+  handler.bounds.extendWith(markers);
+  handler.fitMapToBounds();
+  // handler.getMap().setZoom(15);
+  });
+</script>
+
+</div>
+</div>
+</div>

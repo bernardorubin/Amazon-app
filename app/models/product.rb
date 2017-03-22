@@ -1,4 +1,7 @@
 class Product < ApplicationRecord
+  extend FriendlyId
+  friendly_id :title, use: [:slugged, :history, :finders]
+  mount_uploader :image, ImageUploader
   belongs_to :user, optional: true
   has_many :reviews, -> { order(created_at: :desc) }, dependent: :destroy
   has_many :likes, dependent: :destroy
